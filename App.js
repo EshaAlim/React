@@ -1,62 +1,50 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import './App.css';
+import React from 'react'
+import { useState } from 'react'
 
-function App() {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
+export default function App() {
+  const [newTodo, setNewTodo] = useState('')
+  const [todos, setTodos] = useState([])
+  function handleAdd() {
+    if (newTodo.trim() != '') {
+      setTodos([...todos, { text: newTodo, isCheck: false }])
+      setNewTodo('')
+    }
+    console.log(todos)
 
+  }
+  function handleCheck(i) {
+    const updatedTodos = todos.map((task, index) =>
+      index === i ? { ...task, isCheck: !task.isCheck } : task
+    )
+    setTodos(updatedTodos)
+
+  }
   return (
-    <div>
-      {/* Slider */}
-      <div className="slider-container">
-        <Slider {...settings}>
-          <div className="slide red">
-            <h3>Eesha</h3>
-          </div>
-          <div className="slide blue">
-            <h3>Alam</h3>
-          </div>
-          <div className="slide green">
-            <h3>Ihtesham</h3>
-          </div>
-          <div className="slide yellow">
-            <h3>QuilCoder</h3>
-          </div>
-          <div className="slide purple">
-            <h3>WebDeveloper</h3>
-          </div>
-          <div className="slide orange">
-            <h3>React</h3>
-          </div>
-        </Slider>
+    <div className='w-3/4 m-auto bg-lime-200'>
+      <div className='text-center text-3xl font-bold bg-red-300' >
+        Eesha Todo List
       </div>
-      <nav className="navbar">
-        <ul className="nav-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#project">Project</a></li>
-          <li><a href="#blog">Blog</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-      <div className="hero-section">
-        <h1>Build Your Dreams With<br />Eesha</h1>
-        <p>Studied at UAF</p>
-        <button className="cta-button">Get Started</button>
+      <div>
+        <div>
+          <input type='text' onChange={(e) => setNewTodo(e.target.value)} value={newTodo} className='border-2 border-black' />
+          <button onClick={handleAdd} className='bg-slate-500 text-white p-3 rounded-xl ml-3'>Add</button>
+        </div>
+        <div>
+          {newTodo}
+          <h1 className='text-3xl font-bold my-6'>Our Todos</h1>
+          {todos.map((v, i) => (
+            <div key={i} className='flex gap-3 my-3 bg-red-300'>
+              <input type='checkbox' value={v.isCheck} onChange={() => handleCheck(i)} />
+              <div className={v.isCheck ? 'line-through' : ''}>{v.text}</div>
+              <div className='flex gap-4'>
+                <button className='bg-black p-1 text-white rounded-xl'>edit</button>
+                <button className='bg-black p-1 text-white rounded-xl'>remove</button>
+              </div>
+            </div>
+          ))}
+
+        </div>
       </div>
     </div>
-
-  );
+  )
 }
-
-
-export default App;
